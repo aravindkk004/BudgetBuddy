@@ -49,8 +49,8 @@ export async function POST(req) {
     const { id, email_addresses } = evt.data;
 
     const user = {
-      clerdId: id,
-      email: email_addresses[0].email_addresses,
+      clerkId: id,
+      email: email_addresses[0].email_address,
     };
     console.log("from clerk webhooks", user);
     const newUser = await createUser(user);
