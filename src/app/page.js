@@ -1,9 +1,9 @@
-import Image from "next/image";
+import Index from "@/components/Home/Index";
 
 export default function Home() {
   return (
     <>
-      
+      <Index />
     </>
   );
 }
