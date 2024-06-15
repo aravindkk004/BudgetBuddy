@@ -8,7 +8,7 @@ const BudgetsCards = () => {
           <div
             className="bg-slate-100 p-10 rounded-md text-center items-center flex flex-col border-2 border-dashed cursor-pointer hover:shadow-md"
             type="button"
-            aria-hashpopup="dialog"
+            aria-haspopup="dialog"
             aria-expanded="false"
             aria-controls="radix-:r0:"
             data-state="closed"

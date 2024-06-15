@@ -24,7 +24,7 @@ const Dashboard = ({ openNav }) => {
           <div>
             <h1 className="md:text-4xl text-2xl font-extrabold ">Hi, {user?.fullName} ✌️</h1>
             <p className="text-zinc-500">
-              Here's what happenning with your money, Lets Manage your expense
+              Here&apos;s what happenning with your money, Lets Manage your expense
             </p>
           </div>
 
