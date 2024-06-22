@@ -1,6 +1,6 @@
 import { MdDelete } from "react-icons/md";
 
-const Expenses = () => {
+const Expenses = ({ expenses, loading }) => {
   return (
     <>
       <div className="mt-3">
@@ -11,15 +11,21 @@ const Expenses = () => {
           <h2 className="font-bold">Date</h2>
           <h2 className="font-bold">Action</h2>
         </div>
-
-        <div className="grid grid-cols-4 bg-slate-50 p-2">
-          <h2>New Car</h2>
-          <h2>2000</h2>
-          <h2>13/06/2024</h2>
-          <h2 className="cursor-pointer">
-            <MdDelete className="text-red-600" size={30} />
-          </h2>
-        </div>
+        {loading ? (<p>Loading...</p>): 
+        expenses.length > 0 ? (
+          expenses.map((expense, index) => (
+            <div key={index} className="grid grid-cols-4 bg-slate-50 p-2">
+              <h2>{expense.budgetName}</h2>
+              <h2>{expense.budgetAmount}</h2>
+              <h2>{new Date(expense.createdAt).toLocaleDateString()}</h2>
+              <h2 className="cursor-pointer">
+                <MdDelete className="text-red-600" size={30} />
+              </h2>
+            </div>
+          ))
+        ) : (
+          <p className="mt-2">No expenses found.</p>
+        )}
       </div>
     </>
   );

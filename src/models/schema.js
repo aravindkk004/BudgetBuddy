@@ -3,22 +3,25 @@ import mongoose from "mongoose";
 const budgetSchema = new mongoose.Schema({
   budgetName: {
     type: String,
-    required: true,
   },
   budgetAmount: {
     type: Number,
-    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
 const expenseShcema = new mongoose.Schema({
+  emoji: {
+    type: String,
+  },
   expenseName: {
     type: String,
-    required: true,
   },
   expenseTotalAmount: {
     type: Number,
-    required: true,
   },
   budgets: [budgetSchema],
 });

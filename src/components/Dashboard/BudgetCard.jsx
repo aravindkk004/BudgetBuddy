@@ -1,18 +1,18 @@
 import React from "react";
 
-const BudgetCard = () => {
+const BudgetCard = ({name, amount, emoji, items}) => {
   return (
     <>
       <div className="p-5 border rounded-lg hover:shadow-md cursor-pointer h-[170px]">
         <div className="flex gap-2 items-center justify-between">
           <div className="flex gap-2 items-center">
-            <h2 className="text-2xl p-3 px-4 bg-slate-100 rounded-full">😀</h2>
+            <h2 className="text-2xl p-3 px-4 bg-slate-100 rounded-full">{emoji}</h2>
             <div>
-              <h2 className="font-bold">Car</h2>
-              <h2 className="text-sm text-gray-500">1 Item</h2>
+              <h2 className="font-bold">{name}</h2>
+              <h2 className="text-sm text-gray-500">{items} Item</h2>
             </div>
           </div>
-          <h2 className="font-bold text-[#4848d2] text-lg">$20000</h2>
+          <h2 className="font-bold text-[#4848d2] text-lg">${amount}</h2>
         </div>
         <div className="mt-5">
           <div className="flex items-center justify-between mb-3">

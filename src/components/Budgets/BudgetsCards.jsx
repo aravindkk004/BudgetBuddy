@@ -1,6 +1,16 @@
 import BudgetCard from "../Dashboard/BudgetCard";
+import { useRouter } from "next/navigation";
 
-const BudgetsCards = () => {
+const BudgetsCards = ({ openFormClick, budgets }) => {
+  const router = useRouter();
+
+  const handleBudgetClick = (budget) => {
+    const { _id, expenseName, expenseTotalAmount, emoji } = budget;
+    router.push(
+      `/expenses/${_id}?name=${expenseName}&amount=${expenseTotalAmount}&emoji=${emoji}`
+    );
+  };
+
   return (
     <>
       <div className="mt-7">
@@ -12,17 +22,23 @@ const BudgetsCards = () => {
             aria-expanded="false"
             aria-controls="radix-:r0:"
             data-state="closed"
+            onClick={openFormClick}
           >
             <h2 className="text-3xl">+</h2>
             <h2>Create New Budget</h2>
           </div>
-
-          <BudgetCard />
-          <BudgetCard />
-          <BudgetCard />
-          <BudgetCard />
-          <BudgetCard />
-          <BudgetCard />
+          {budgets.map((budget) => (
+            <div key={budget._id} onClick={() => handleBudgetClick(budget)}>
+              <BudgetCard
+                items={budget.budgets?.length}
+                key={budget.expenseName}
+                name={budget.expenseName}
+                amount={budget.expenseTotalAmount}
+                emoji={budget.emoji}
+                id={budget._id}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </>

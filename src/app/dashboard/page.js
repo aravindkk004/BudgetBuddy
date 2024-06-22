@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <div className="flex w-[100%] fixed  h-[100vh]">
       <div
-        className={`w-[300px] border-zinc-300 border-r md:block ${
+        className={`w-[330px] border-zinc-300 border-r md:block ${
           open ? "block" : "hidden"
         } md:static absolute z-2`}
       >

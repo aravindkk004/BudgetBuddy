@@ -1,9 +1,11 @@
-"use client";
-import { useState } from "react";
-
-const AddExpense = () => {
-  const [name, setName] = useState("");
-  const [amount, setAmount] = useState("");
+const AddExpense = ({
+  handleAddExpense,
+  loading,
+  names,
+  amounts,
+  handleSetName,
+  handleSetAmount,
+}) => {
   return (
     <>
       <div className="border p-5 rounded-lg">
@@ -14,8 +16,8 @@ const AddExpense = () => {
             <input
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="e.g. Bedroom Decor"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={names}
+              onChange={(e) => handleSetName(e.target.value)}
             />
           </h2>
         </div>
@@ -25,16 +27,16 @@ const AddExpense = () => {
             <input
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="e.g. 1000"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              value={amounts}
+              onChange={(e) => handleSetAmount(e.target.value)}
             />
           </h2>
         </div>
         <button
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium  bg-[#4845d2] text-zinc-200 hover:bg-[#4845d2]/90 h-10 px-4 py-2 mt-3 w-full cursor-pointer"
-          disabled
+          onClick={handleAddExpense}
         >
-          Add New Expense
+          {loading ? "Adding..." : "Add New Expense"}
         </button>
       </div>
     </>

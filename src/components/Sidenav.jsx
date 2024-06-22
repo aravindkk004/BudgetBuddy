@@ -13,7 +13,7 @@ const Sidenav = ({ name, openNav }) => {
     <>
       <nav className="h-[100vh] relative bg-white z-50 pt-2">
         <IoMdClose
-          className="absolute right-3 top-5  md:hidden cursor-pointer"
+          className="absolute right-3 top-2  md:hidden cursor-pointer"
           onClick={openNav}
           size={25}
         />
