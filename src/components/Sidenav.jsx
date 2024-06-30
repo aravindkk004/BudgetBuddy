@@ -18,7 +18,7 @@ const Sidenav = ({ name, openNav }) => {
           size={25}
         />
         <h2 className="font-sans font-extrabold text-2xl text-[#4845d2]  mt-3 flex items-center justify-center">
-          <Image src="/buddy_logo.png" width={50} height={60} />
+          <Image src="/buddy_logo.png" width={50} height={60} alt="logo"/>
           BudgetBuddy
         </h2>
         <div className="p-4 mt-2">

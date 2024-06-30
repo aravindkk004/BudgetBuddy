@@ -8,7 +8,7 @@ const NavBar = () => {
       <nav className="flex items-center justify-between px-8 py-5 border-b border-zinc-500 absolute w-full bg-white">
         <div>
         <h2 className="font-sans font-extrabold text-2xl text-[#4845d2] text-center  flex items-center">
-          <Image src="/buddy_logo.png" width={50} height={60} />
+          <Image src="/buddy_logo.png" width={50} height={60} alt="logo"/>
           BudgetBuddy
         </h2>
         </div>
