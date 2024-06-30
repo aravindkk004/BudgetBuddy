@@ -7,6 +7,7 @@ import { useUser } from "@clerk/nextjs";
 
 const Dashboard = ({ openNav }) => {
   const { user } = useUser();
+  
   return (
     <>
       <div className="overflow-y-scroll h-[100vh]">
@@ -22,9 +23,12 @@ const Dashboard = ({ openNav }) => {
         </div>
         <div className="p-6">
           <div>
-            <h1 className="md:text-4xl text-2xl font-extrabold ">Hi, {user?.fullName} ✌️</h1>
+            <h1 className="md:text-4xl text-2xl font-extrabold ">
+              Hi, {user?.fullName} ✌️
+            </h1>
             <p className="text-zinc-500">
-              Here&apos;s what happenning with your money, Lets Manage your expense
+              Here&apos;s what happenning with your money, Lets Manage your
+              expense
             </p>
           </div>
 

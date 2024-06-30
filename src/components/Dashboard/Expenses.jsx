@@ -1,6 +1,6 @@
 import { MdDelete } from "react-icons/md";
 
-const Expenses = ({ expenses, loading }) => {
+const Expenses = ({ expenses, loading, handleExpenseDelete }) => {
   return (
     <>
       <div className="mt-3">
@@ -11,15 +11,20 @@ const Expenses = ({ expenses, loading }) => {
           <h2 className="font-bold">Date</h2>
           <h2 className="font-bold">Action</h2>
         </div>
-        {loading ? (<p>Loading...</p>): 
-        expenses.length > 0 ? (
+        {loading ? (
+          <p>Loading...</p>
+        ) : expenses.length > 0 ? (
           expenses.map((expense, index) => (
             <div key={index} className="grid grid-cols-4 bg-slate-50 p-2">
               <h2>{expense.budgetName}</h2>
               <h2>{expense.budgetAmount}</h2>
               <h2>{new Date(expense.createdAt).toLocaleDateString()}</h2>
               <h2 className="cursor-pointer">
-                <MdDelete className="text-red-600" size={30} />
+                <MdDelete
+                  className="text-red-600"
+                  size={30}
+                  onClick={()=>handleExpenseDelete(expense._id)}
+                />
               </h2>
             </div>
           ))

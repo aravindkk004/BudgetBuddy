@@ -2,13 +2,8 @@
 import { RiMenu2Line } from "react-icons/ri";
 import BudgetsCards from "./BudgetsCards";
 import { SignedIn, UserButton } from "@clerk/nextjs";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
 
 const Budgets = ({ openNav, openFormClick, budgets, budgetLoading }) => {
-  
-
   return (
     <>
       <div className="overflow-y-scroll h-[100vh]">

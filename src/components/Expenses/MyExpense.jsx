@@ -11,14 +11,26 @@ import { SignedIn, UserButton } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
-const MyExpense = ({ openNav, openFormClick, name, amount, emoji, id }) => {
+const MyExpense = ({
+  openNav,
+  openFormClick,
+  name,
+  amount,
+  emoji,
+  id,
+  totalSpentAmount,
+}) => {
+  const router = useRouter();
   const [expenses, setExpenses] = useState([]);
   const [expenseLoading, setExpenseLoading] = useState(false);
   const [addLoading, setAddLoading] = useState(false);
   const [names, setName] = useState("");
   const [amounts, setAmount] = useState("");
   const { user } = useUser();
+  const [spentAmount, setSpentAmount] = useState(totalSpentAmount);
 
   const handleSetName = (names) => {
     setName(names);
@@ -67,17 +79,61 @@ const MyExpense = ({ openNav, openFormClick, name, amount, emoji, id }) => {
           createdAt: new Date().toISOString(),
         };
         setExpenses((prevExpenses) => [newExpense, ...prevExpenses]);
+        setSpentAmount(Number(spentAmount) + Number(amounts));
+        toast.success("Expense added successfully")
       }
 
       setName("");
       setAmount("");
     } catch (error) {
       console.log(error);
+      toast.error("Error while adding")
     } finally {
       setAddLoading(false);
     }
   };
 
+  const handleBudgetDelete = async () => {
+    const confirmed = window.confirm("Are you sure you want to delete?");
+
+    if (confirmed) {
+      try {
+        const res = await axios.delete(
+          `/api/budget/deleteBudget?userId=${user?.id}&budgetId=${id}`
+        );
+        if (res.status == 200) {
+          router.push("/budgets");
+        }
+      } catch (error) {}
+      toast.success("Deleted successfully")
+    } else {
+      toast.error("Error while deleting")
+    }
+  };
+
+  const handleExpenseDelete = async (expenseId) => {
+    const confirmed = window.confirm("Are you sure you want to delete?");
+    if (confirmed) {
+      try {
+        const res = await axios.delete(
+          `/api/expense/deleteExpense?userId=${user?.id}&expenseId=${expenseId}&budgetId=${id}`
+        );
+        if (res.status === 200) {
+          setExpenses((prevExpenses) =>
+            prevExpenses.filter((expense) => expense._id !== expenseId)
+          );
+          setSpentAmount(
+            (prev) =>
+              prev -
+              expenses.find((expense) => expense._id === expenseId).budgetAmount
+          );
+          toast.success("Deleted successfully")
+        }
+      } catch (error) {
+        toast.error("Error while deleting")
+      }
+    }
+  };
   return (
     <>
       <div className="overflow-y-scroll h-[100vh]">
@@ -121,6 +177,7 @@ const MyExpense = ({ openNav, openFormClick, name, amount, emoji, id }) => {
                 aria-expanded="false"
                 aria-controls="radid:rla:"
                 data-state="closed"
+                onClick={handleBudgetDelete}
               >
                 <MdDeleteOutline size={20} className="mr-2" />
                 Delete
@@ -129,7 +186,14 @@ const MyExpense = ({ openNav, openFormClick, name, amount, emoji, id }) => {
           </h2>
 
           <div className="grid grid-cols-1  md:grid-cols-2 mt-6 gap-5">
-            <BudgetCard name={name} amount={amount} emoji={emoji} id={id} />
+            <BudgetCard
+              name={name}
+              amount={amount}
+              emoji={emoji}
+              id={id}
+              // spentAmount={totalSpentAmount}
+              spentAmount={spentAmount}
+            />
             <AddExpense
               handleAddExpense={handleAddExpense}
               loading={addLoading}
@@ -141,7 +205,11 @@ const MyExpense = ({ openNav, openFormClick, name, amount, emoji, id }) => {
           </div>
 
           <div className="mt-4">
-            <Expenses expenses={expenses} loading={expenseLoading} />
+            <Expenses
+              expenses={expenses}
+              loading={expenseLoading}
+              handleExpenseDelete={handleExpenseDelete}
+            />
           </div>
         </div>
       </div>

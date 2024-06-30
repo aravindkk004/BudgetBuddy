@@ -6,6 +6,7 @@ import { IoClose } from "react-icons/io5";
 import EmojiPicker from "emoji-picker-react";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
+import toast from "react-hot-toast";
 
 export default function Home() {
   const { user } = useUser();
@@ -69,6 +70,7 @@ export default function Home() {
           expenseTotalAmount: amount,
         };
         setBudgets((prevBudgets) => [newBudget, ...prevBudgets]);
+        toast.success("Added successfully")
       }
     } catch (error) {
       console.error("Axios error:", error);
@@ -112,7 +114,7 @@ export default function Home() {
           />
           <div className="flex flex-col space-y-1.5 text-center sm:text-left">
             <h2 className="text-lg font-semibold leading-none tracking-tight">
-              Update Budget
+              Create New Budget
             </h2>
             <div>
               <div className="mt-5 mb-2">

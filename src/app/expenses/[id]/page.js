@@ -4,40 +4,66 @@ import Sidenav from "@/components/Sidenav";
 import { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import EmojiPicker from "emoji-picker-react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+import axios from "axios";
+import { useUser } from "@clerk/nextjs";
+import toast from "react-hot-toast";
 
 export default function Home() {
+  const { user } = useUser();
   const [emojiIcon, setEmojiIcon] = useState("😁");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const queries = useSearchParams();
   const params = useParams();
-  const router = useRouter();
-  // const {name, amount, emoji} = queries.get();
-  const id = params.id
+  const id = params.id;
 
-  const name = queries.get("name")
-  const amount = queries.get("amount")
-  console.log(amount)
-  const emoji = queries.get("emoji")
+  const name = queries.get("name");
+  const amount = queries.get("amount");
+  const emoji = queries.get("emoji");
+  const spentAmount = queries.get("spentAmount")
 
   const [expenseDetails, setExpenseDetails] = useState({
-    id: '',
-    name: '',
-    amount: '',
-    emoji: '',
+    id: "",
+    name: "",
+    amount: "",
+    emoji: "",
+    spentAmount: ""
   });
 
-  useEffect(() => {
-      setExpenseDetails({
-        id: id,
-        name: name ,
-        amount: amount ,
-        emoji: emoji,
+  const updateBudget = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/budget/updateBudget", {
+        emoji: expenseDetails.emoji,
+        budgetName: expenseDetails.name,
+        budgetAmount: expenseDetails.amount,
+        clerkId: user?.id,
+        id: expenseDetails.id,
       });
-    
-  }, [ id, name, amount, emoji, emojiIcon]);
+      if (res.status == 200) {
+        setOpenForm(!openForm);
+        setLoading(false);
+        toast.success("Updated Successfully")
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error while updating. try again")
+    }
+  };
+
+  useEffect(() => {
+    setExpenseDetails({
+      id: id,
+      name: name,
+      amount: amount,
+      emoji: emoji || emojiIcon,
+      spentAmount: spentAmount
+    });
+    console.log("spent is", spentAmount)
+  }, [id, name, amount, emoji, emojiIcon,spentAmount]);
 
   const openNav = () => {
     setOpen(!open);
@@ -72,8 +98,8 @@ export default function Home() {
             amount={expenseDetails.amount}
             emoji={expenseDetails.emoji}
             id={expenseDetails.id}
+            totalSpentAmount={spentAmount}
           />
-          
         </div>
       </div>
       {openForm && (
@@ -93,7 +119,7 @@ export default function Home() {
                   onClick={() => setOpenEmojiPicker(!openEmojiPicker)}
                   className="border border-black text-3xl p-2 rounded-lg cursor-pointer"
                 >
-                  {emojiIcon}
+                  {expenseDetails.emoji}
                 </button>
                 <div className="mt-5 absolute">
                   {openEmojiPicker && (
@@ -101,6 +127,10 @@ export default function Home() {
                       open={openEmojiPicker}
                       onEmojiClick={(e) => {
                         setEmojiIcon(e.emoji);
+                        setExpenseDetails((prev) => ({
+                          ...prev,
+                          emoji: e.emoji,
+                        }));
                         setOpenEmojiPicker(false);
                       }}
                     />
@@ -114,6 +144,13 @@ export default function Home() {
                     type="text"
                     placeholder="Car"
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    onChange={(e) =>
+                      setExpenseDetails((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
+                    }
+                    value={expenseDetails.name}
                   />
                 </div>
                 <div className="mt-2">
@@ -122,14 +159,24 @@ export default function Home() {
                     type="text"
                     placeholder="20000"
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    onChange={(e) =>
+                      setExpenseDetails((prev) => ({
+                        ...prev,
+                        amount: e.target.value,
+                      }))
+                    }
+                    value={expenseDetails.amount}
                   />
                 </div>
               </div>
             </div>
           </div>
           <div>
-            <button className="bg-[#4845d2] text-white w-full h-[40px] rounded-md">
-              Update Budget
+            <button
+              className="bg-[#4845d2] text-white w-full h-[40px] rounded-md"
+              onClick={updateBudget}
+            >
+              {loading ? "Updating..." : "Update Budget"}
             </button>
           </div>
         </div>

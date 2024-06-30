@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDb } from "@/libs/connectToDb";
 import User from "@/models/schema";
 
-export async function GET(req, {params}) {
+export async function GET(req, { params }) {
   await connectToDb();
   try {
     const { id } = params;
@@ -10,12 +10,23 @@ export async function GET(req, {params}) {
     if (!user) {
       return NextResponse.json({ error: "User not Found" }, { status: 404 });
     }
-    const userBudget = user.Budget;
+
+    const userBudget = user.Budget.map((budget) => {
+      let totalSpentAmount = 0;
+      budget.budgets.forEach((item) => {
+        totalSpentAmount += item.budgetAmount;
+      });
+      return {
+        ...budget.toObject(), 
+        totalSpentAmount,
+      };
+    });
+
     return NextResponse.json({ userBudget }, { status: 200 });
   } catch (error) {
     console.error("Server error:", error);
     return NextResponse.json(
-      { message: "Error while Adding" },
+      { message: "Error while fetching budget data" },
       { status: 500 }
     );
   }

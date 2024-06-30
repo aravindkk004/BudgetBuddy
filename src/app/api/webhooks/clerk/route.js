@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { WebhookEvent, clerkClient } from "@clerk/nextjs/server";
 import { createUser } from "@/libs/actions/user.action";
 import { NextResponse } from "next/server";
+import toast from "react-hot-toast";
 
 export async function POST(req) {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
@@ -44,7 +45,6 @@ export async function POST(req) {
   const { id } = evt.data;
   const eventType = evt.type;
 
-  //create user in mongodb
   if (eventType === "user.created") {
     const { id, email_addresses } = evt.data;
 
@@ -61,6 +61,7 @@ export async function POST(req) {
           userId: newUser._id,
         },
       });
+      toast.success("Signup successfully")
     }
     return NextResponse.json({
       message: "user added successfully",

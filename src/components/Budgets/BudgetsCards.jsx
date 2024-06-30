@@ -5,9 +5,10 @@ const BudgetsCards = ({ openFormClick, budgets }) => {
   const router = useRouter();
 
   const handleBudgetClick = (budget) => {
-    const { _id, expenseName, expenseTotalAmount, emoji } = budget;
+    const { _id, expenseName, expenseTotalAmount, emoji, totalSpentAmount } = budget;
+    console.log("from another", totalSpentAmount)
     router.push(
-      `/expenses/${_id}?name=${expenseName}&amount=${expenseTotalAmount}&emoji=${emoji}`
+      `/expenses/${_id}?name=${expenseName}&amount=${expenseTotalAmount}&emoji=${emoji}&spentAmount=${totalSpentAmount}`
     );
   };
 
@@ -36,6 +37,7 @@ const BudgetsCards = ({ openFormClick, budgets }) => {
                 amount={budget.expenseTotalAmount}
                 emoji={budget.emoji}
                 id={budget._id}
+                spentAmount={budget.totalSpentAmount}
               />
             </div>
           ))}
